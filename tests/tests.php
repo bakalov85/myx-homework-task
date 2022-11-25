@@ -27,11 +27,12 @@ foreach($testFiles as $fileName) {
     # Send request.
     $result = curl_exec($ch);
     curl_close($ch);
+    $json = json_decode($result, true);
     
-    if (json_decode($result, true)['message'] === 'Success'){
+    if (json_last_error() === JSON_ERROR_NONE && $json['message'] === 'Success'){
         echo 'Success' . PHP_EOL;
     } else {
-        echo 'Error POSTing file ' . $fileName . PHP_EOL;
+        echo 'Error POSTing file ' . $fileName . '' . '. Check that uploads/ and thumbnails/ dirs are writable' . PHP_EOL;
         $hasError = true;
     }
 }
@@ -53,10 +54,10 @@ foreach($testFiles as $fileName) {
 
     $jsonArr = json_decode($result, true);
 
-    if ($jsonArr['base64'] === imgToBase64('images' . DIRECTORY_SEPARATOR . $fileName)){
+    if (isset($jsonArr['base64']) && $jsonArr['base64'] === imgToBase64('images' . DIRECTORY_SEPARATOR . $fileName)){
         echo 'verifying base64 integrity - Success' . PHP_EOL;
     } else {
-        echo 'Error: base64 mismatch!';
+        echo 'Error: base64 mismatch!' . PHP_EOL;
         $hasError = true;
     }
 }
@@ -84,7 +85,7 @@ if (count($jsonArr) === 2 &&
     $jsonArr[1]['url'] === $basePath . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'file4.jpeg'){
     echo 'Success testing get-zone.php' . PHP_EOL;
 } else {
-    echo 'Error testing get-zone.php!';
+    echo 'Error testing get-zone.php!' . PHP_EOL;
     $hasError = true;
 }
 /**
