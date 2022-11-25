@@ -81,4 +81,4 @@ When POST-ing an image, it is put into the uploads/ directory. A smaller thumbna
     ```
 
 ## Notes
-I work with MIME types, because they are more reliable than file extensions.
+I work with MIME types, because they are more reliable than file extensions. My project supports JPEG and PNG files.
